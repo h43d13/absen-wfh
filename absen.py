@@ -47,9 +47,6 @@ def absen(nip, pas):
     #    '/html/body/div/div/div[2]/div/div[2]/div/form/div/div[3]/button').click())
     #finally:
         
-    
-
-
 # looping nip dan pass absen
 for x in range(19):
     absen(nip[x], nip[x])
