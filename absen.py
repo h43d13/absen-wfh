@@ -5,7 +5,7 @@ from selenium.common.exceptions import NoSuchElementException
 
 # dipakai untuk menjeda
 import time
-
+print("Automatisasi Absen dp-wfh/skemaraja \ndengan Web Selenium Pyhon \nCreated By : h43d13")
 # memilih web browser
 browser = webdriver.Firefox()
 
@@ -68,5 +68,5 @@ for x in range(3):
     absen(nip[x+19], pas[x])
 else:
     browser.quit()
-    print("\nAutomation Absensi... Selesai")
+    print("\nAutomatisasi Absen dengan Web Selenium Python... Selesai")
 exit()
