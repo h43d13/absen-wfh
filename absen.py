@@ -5,6 +5,8 @@ from selenium.common.exceptions import NoSuchElementException
 
 # dipakai untuk menjeda
 import time
+cobain = time.asctime(time.localtime(time.time()))
+print(cobain)
 print("Automatisasi Absen dp-wfh/skemaraja \ndengan Web Selenium Pyhon \nCreated By : h43d13")
 # memilih web browser
 browser = webdriver.Firefox()
@@ -17,8 +19,9 @@ nip = ["3175022708970001", "3201256301000004", "3217015908930003", "198411102003
        "198503222006041002", "198606222006041003", "196308021990111001", "197511272006041001",
        "198404252010122001", "198312022008121001", "199007212010121004", "197903022003121001",
        "196404251986031002", "198302082003121003", "198009282003121009", "197410212003122001",
-       "197507072003121002", "197902252003121001", "197904202003121002", "197508152006041002",
-       "198110012003121002", "3201161811910002"]
+       "197507072003121002", "197902252003121001", "197904202003121002", "197711142003121001",
+       "197708132003121001",
+       "197508152006041002", "198110012003121002", "3201161811910002"]
 # array pass
 pas = ["Ayrahayu", "alie@781", "18111991"]
 
@@ -60,12 +63,12 @@ def absen(nip, pas):
     print("Logout         [ berhasil ]")         
 
 # looping nip dan pass absen
-for x in range(19):
+for x in range(21):
     print("\nloop ke-",x+1)
     absen(nip[x], nip[x])
 for x in range(3):
-    print("\nloop ke-",x+20)
-    absen(nip[x+19], pas[x])
+    print("\nloop ke-",x+22)
+    absen(nip[x+21], pas[x])
 else:
     browser.quit()
     print("\nAutomatisasi Absen dengan Web Selenium Python... Selesai")
