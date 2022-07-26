@@ -1,10 +1,16 @@
 # dipakai untuk memanggil webdriver
 from warnings import catch_warnings
 from selenium import webdriver
+from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+from tabulate import tabulate as t
 
 # dipakai untuk menjeda
+import numpy as np
+import threading
 import time
 
 cobain = time.asctime(time.localtime(time.time()))
@@ -18,35 +24,10 @@ browser = webdriver.Firefox()
 
 # array nip
 nip = [
-    [3175022708970001, 0, "WFO"],  # HA
-    [3201256301000004, 0, "WFO"],  # MIDP
-    [3217015908930003, 0, "WFO"],  # MS
-    [3201161811910002, "18111991", "WFO"],  # AS
-    [3175011609900003, "pulsar200", "WFO"],  # SP
-    [198508012003121002, 0, "WFO"],  # DSDS
-    [198711022008121001, 0, "WFO"],  # NTH
-    [198411102003121006, 0, "WFO"],  # H
-    [198503222006041002, 0, "WFO"],  # DASW
-    [198606222006041003, 0, "WFO"],  # GK
-    #   ["197601132006041001",0,"WFH"],  S
-    [197511272006041001, 0, "WFO"],  # GN
-    #   ["198404252010122001",0,"WFO"],  TNP
-    #   [198312022008121001, 0, "WFH"],  # CS
-    [199007212010121004, 0, "WFO"],  # AA
-    [197903022003121001, 0, "WFO"],  # AA
-    [196404251986031002, 0, "WFO"],  # R
-    [198302082003121003, 0, "WFO"],  # AW
-    [198009282003121009, 0, "WFO"],  # S
-    #   ["197410212003122001",0,"WFO"],  L X
-    [197507072003121002, 0, "WFO"],  # EY
-    [197902252003121001, 0, "WFO"],  # DH
-    [197904202003121002, 0, "WFO"],  # W
-    #   [197711142003121001, 0, "WFO"],  # S
-    [197708132003121001, 0, "WFO"],  # AP
-    [197508152006041002, "Ayrahayu", "WFO"],  # R
-    [198110012003121002, "alie@781", "WFO"],  # AS
-    [197601132006041001, "Januari1976", "WFO"],  # M
+    [3175022708970001, 0, "DL"],  # HA
 ]
+tabel = [["nama","Jabatan","Status","Unit Kantor", "Unit Kerja", "Sub Bagian"]]
+cabel = tabel.copy()
 
 def skemaraja():
     #     masuk ke web absen
@@ -129,7 +110,35 @@ def gejala():
     ).click()
     print("Form Gejala    [ berhasil ]")
 
-    def absen(nip, pas, st):
+def info(tabel):
+    nama = browser.find_element(By.CSS_SELECTOR, ".profile-username").text
+    fung = browser.find_element(By.XPATH, "/html/body/div/div/div[2]/div/div[1]/div[1]/div/div/p").text
+    unit = browser.find_element(By.XPATH, "/html/body/div/div/div[2]/div/div[1]/div[1]/div/div/ul/li[1]/div/div[2]").text
+    kntr = browser.find_element(By.XPATH, "/html/body/div/div/div[2]/div/div[1]/div[1]/div/div/ul/li[2]/div/div[2]").text
+    sktr = browser.find_element(By.XPATH, "/html/body/div/div/div[2]/div/div[1]/div[1]/div/div/ul/li[3]/div/div[2]").text
+    stat = browser.find_element(By.XPATH, "/html/body/div/div/div[2]/div/div[1]/div[1]/div/div/ul/li[4]/div/div[2]").text
+    kondisi = [["nama","Jabatan","Status","Unit Kantor", "Unit Kerja", "Sub Bagian"],[nama,fung,stat,unit,kntr,sktr]]
+    tabel.append([nama,fung,stat,unit,kntr,sktr])
+
+    print("report:")
+    print(t(kondisi, headers="firstrow", tablefmt="psql"))
+
+def login():
+    info(tabel)
+    #`keluar dari absen
+    try:
+        browser.get("https://skemaraja.dephub.go.id/logout")
+        #    browser.quit()
+        # try:
+        #    browser.find_element_by_link_text("Check Out").click()
+        print("Logout         [ berhasil ]")
+    except NoSuchElementException:
+        browser.quit()
+        skemaraja()
+        print("Logout         [ refresh  ]")
+
+# definisi absen
+def absen(nip, pas, st):
     skemaraja()
 
     # input NIP
@@ -176,7 +185,6 @@ def gejala():
     else:
         login()
 
-
 # looping nip dan pass absen
 for x in range(len(nip)):
     print("\nloop ke-", x + 1, nip[x][0])
@@ -187,4 +195,6 @@ for x in range(len(nip)):
 
 browser.quit()
 print("\nAutomatisasi Absen dengan Web Selenium Python... Selesai")
+print('\nsummary : ')   
+print(t(tabel, headers="firstrow", tablefmt="psql"))
 exit()
